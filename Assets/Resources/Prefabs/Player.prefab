@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 8189976477174412364}
   - component: {fileID: 8189976477174412403}
   - component: {fileID: 4578181080757328008}
+  - component: {fileID: -5225000253220428133}
+  - component: {fileID: 2388408290574092930}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -130,13 +132,13 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!114 &8189976477174412364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,19 +182,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionConfig:
     synchronizationEnabled: 1
-    tolerance: 0.01
+    tolerance: 0.001
   rotationConfig:
     synchronizationEnabled: 1
     tolerance: 1
   velocityConfig:
     synchronizationEnabled: 1
-    tolerance: 0.01
+    tolerance: 0.001
   angularVelocityConfig:
     synchronizationEnabled: 1
     tolerance: 1
   dragConfig:
-    synchronizationEnabled: 0
-    tolerance: 0.01
+    synchronizationEnabled: 1
+    tolerance: 0.001
   angularDragConfig:
     synchronizationEnabled: 0
     tolerance: 0.01
@@ -203,8 +205,8 @@ MonoBehaviour:
     synchronizationEnabled: 0
     tolerance: 0.01
   gravityScaleConfig:
-    synchronizationEnabled: 0
-    tolerance: 0.01
+    synchronizationEnabled: 1
+    tolerance: 0.001
   isKinematicConfig:
     synchronizationEnabled: 0
     tolerance: 0
@@ -220,6 +222,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c8dc7f362d2034b8ec077261466369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5225000253220428133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8189976477174412363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be83b73cb19a23c47ac17af5b56de750, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2388408290574092930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8189976477174412363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58d3453b0dcbb0546a7f9f7b66146b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceleration: 1000
+  drag: 10
 --- !u!1 &8189976477464310967
 GameObject:
   m_ObjectHideFlags: 0
