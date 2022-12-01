@@ -13,6 +13,11 @@ namespace Player
 
         public void Initialize()
         {
+            if (IsLocalPlayer())
+            {
+                gameObject.name = "Local Player";
+            }
+
             cameraRoot.SetActive(IsLocalPlayer());
         }
         
@@ -44,6 +49,7 @@ namespace Player
             HandleMovement(horizontalAxis);
             HandleDrag(horizontalAxis);
             HandleJump(jump);
+            HandleSlide();
         }
 
         private void HandleMovement(float axis)
@@ -58,10 +64,13 @@ namespace Player
 
         private void HandleJump(bool input)
         {
-            if (input)
-            {
-                MovementHandler.Jump();
-            }
+            MovementHandler.Jump(input);
+            MovementHandler.BetterJumpLogic(input);
+        }
+
+        private void HandleSlide()
+        {
+            MovementHandler.Slide();
         }
 
         private bool IsLocalPlayer()
