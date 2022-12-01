@@ -1,4 +1,3 @@
-using Cinemachine;
 using Elympics;
 using Medicine;
 using UnityEngine;
@@ -8,17 +7,13 @@ namespace Player
     [RequireComponent(typeof(PlayerInputProvider))]
     public class PlayerController : ElympicsMonoBehaviour, IInputHandler, IUpdatable, IInitializable
     {
+        [SerializeField] private GameObject cameraRoot;
         [Inject] private PlayerMovementHandler MovementHandler { get; }
         [Inject] private PlayerInputProvider InputProvider { get; }
-        
-        [Inject.FromChildren] private CinemachineVirtualCamera VirtualCamera { get; }
-        
+
         public void Initialize()
         {
-            if (!IsLocalPlayer())
-            {
-                VirtualCamera.gameObject.SetActive(false);
-            }
+            cameraRoot.SetActive(IsLocalPlayer());
         }
         
         public void OnInputForClient(IInputWriter inputSerializer)
@@ -27,6 +22,7 @@ namespace Player
                 return;
             
             inputSerializer.Write(InputProvider.HorizontalAxis);
+            inputSerializer.Write(InputProvider.Jump);
         }
 
         #region Useless code
@@ -43,9 +39,11 @@ namespace Player
                 return;
 
             inputReader.Read(out float horizontalAxis);
+            inputReader.Read(out bool jump);
 
             HandleMovement(horizontalAxis);
             HandleDrag(horizontalAxis);
+            HandleJump(jump);
         }
 
         private void HandleMovement(float axis)
@@ -56,6 +54,14 @@ namespace Player
         private void HandleDrag(float axis)
         {
             MovementHandler.SetDrag(axis);
+        }
+
+        private void HandleJump(bool input)
+        {
+            if (input)
+            {
+                MovementHandler.Jump();
+            }
         }
 
         private bool IsLocalPlayer()
