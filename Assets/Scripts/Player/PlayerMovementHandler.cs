@@ -1,3 +1,4 @@
+using System;
 using Elympics;
 using Medicine;
 using UnityEngine;
@@ -16,12 +17,19 @@ namespace Player
         [SerializeField] private float lowJumpMultiplier;
         [Inject] private Rigidbody2D Rb { get; }
         [Inject] private PlayerTouchDetector TouchDetector { get; }
+        [Inject] private PlayerAnimationHandler AnimationHandler { get; }
 
-        private bool _canJump;
+        private bool IsGrounded => TouchDetector.IsGrounded || TouchDetector.IsSliding;
+        private bool CanJump => (IsGrounded || _doubleJumpAvailable) && !_jumpLocked;
+
+        private bool _doubleJumpAvailable;
+        private bool _doubleJumpUsed;
+        private bool _jumpLocked;
 
         public void Move(float axis)
         {
             Rb.AddForce(Vector2.right * axis * acceleration * Elympics.TickDuration, ForceMode2D.Force);
+            AnimationHandler.SetMovementAnimation(axis);
         }
 
         public void SetDrag(float axis)
@@ -29,37 +37,63 @@ namespace Player
             if (TouchDetector.IsGrounded)
             {
                 Rb.drag = axis == 0f && Rb.velocity != Vector2.zero ? drag : 0f;
+                return;
+            }
+            
+            Rb.drag = 0f;
+        }
+
+        #region Jump
+        public void ProcessJump(bool jump)
+        {
+            if (jump)
+            {
+                if (CanJump)
+                {
+                    ApplyJump();
+                }
             }
             else
             {
-                Rb.drag = 0f;
-            }
-        }
-
-        public void Jump(bool input)
-        {
-            if (input && (TouchDetector.IsGrounded || TouchDetector.IsSliding))
-            {
-                if (_canJump)
+                switch (IsGrounded)
                 {
-                    Rb.AddForce(Vector2.up * jumpForce * Elympics.TickDuration, ForceMode2D.Impulse);
-                    _canJump = false;
+                    case true:
+                        _jumpLocked = false;
+                        break;
+                    case false when !_doubleJumpUsed:
+                        _doubleJumpAvailable = true;
+                        _jumpLocked = false;
+                        break;
                 }
             }
-
-            if (!input)
+            
+            BetterJumpLogic(jump);
+        }
+        private void ApplyJump()
+        {
+            if (_doubleJumpAvailable)
             {
-                _canJump = true;
+                _doubleJumpAvailable = false;
+                _doubleJumpUsed = true;
             }
+            else
+            {
+                _doubleJumpUsed = false;
+            }
+            
+            Rb.AddForce(Vector2.up * jumpForce * Elympics.TickDuration, ForceMode2D.Impulse);
+            _jumpLocked = true;
+            
+            AnimationHandler.SetJumpAnimation();
         }
         
-        public void BetterJumpLogic(bool input)
+        private void BetterJumpLogic(bool jump)
         {
             if (TouchDetector.IsGrounded) return;
 
             if (IsFallingDown())
             {
-                if (TouchDetector.IsSliding && input)
+                if (TouchDetector.IsSliding && jump)
                 {
                     Rb.velocity += Vector2.up * Physics2D.gravity.y * (wallSlidingMultiplier - 1) *
                                    Elympics.TickDuration;
@@ -70,12 +104,13 @@ namespace Player
                         Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Elympics.TickDuration;
                 }
             }
-            else if (Rb.velocity.y > 0f && !input)
+            else if (Rb.velocity.y > 0f && !jump)
             {
                 Rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Elympics.TickDuration;
             }
         }
-
+        #endregion
+        
         public void Slide()
         {
             if (TouchDetector.IsSliding)

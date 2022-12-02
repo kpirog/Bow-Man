@@ -10,7 +10,7 @@ namespace Player
         [SerializeField] private GameObject cameraRoot;
         [Inject] private PlayerMovementHandler MovementHandler { get; }
         [Inject] private PlayerInputProvider InputProvider { get; }
-
+        
         public void Initialize()
         {
             if (IsLocalPlayer())
@@ -42,10 +42,10 @@ namespace Player
         {
             if (!ElympicsBehaviour.TryGetInput(PredictableFor, out var inputReader))
                 return;
-
+            
             inputReader.Read(out float horizontalAxis);
             inputReader.Read(out bool jump);
-
+            
             HandleMovement(horizontalAxis);
             HandleDrag(horizontalAxis);
             HandleJump(jump);
@@ -64,8 +64,7 @@ namespace Player
 
         private void HandleJump(bool input)
         {
-            MovementHandler.Jump(input);
-            MovementHandler.BetterJumpLogic(input);
+            MovementHandler.ProcessJump(input);
         }
 
         private void HandleSlide()

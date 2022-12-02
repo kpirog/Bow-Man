@@ -211,12 +211,15 @@ GameObject:
   - component: {fileID: 8189976477174412360}
   - component: {fileID: 8189976477174412366}
   - component: {fileID: 8189976477174412362}
+  - component: {fileID: 7254041935888058945}
   - component: {fileID: 8189976477174412364}
   - component: {fileID: 8189976477174412403}
   - component: {fileID: 4578181080757328008}
   - component: {fileID: -5225000253220428133}
   - component: {fileID: 2388408290574092930}
   - component: {fileID: 1417588860647492102}
+  - component: {fileID: 173756246867168955}
+  - component: {fileID: 2916393178364614670}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -339,6 +342,26 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!95 &7254041935888058945
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8189976477174412363}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: be2596bbca216794381003b9b953c9d7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &8189976477174412364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,7 +475,7 @@ MonoBehaviour:
   drag: 10
   wallSlidingMultiplier: 1
   fallMultiplier: 2
-  lowJumpMultiplier: 2
+  lowJumpMultiplier: 4
 --- !u!114 &1417588860647492102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,4 +494,30 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
-  groundCheckHeight: 0.2
+  groundCheckHeight: 0.01
+--- !u!114 &173756246867168955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8189976477174412363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b330be1db653c164c9d7554dcb07259f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2916393178364614670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8189976477174412363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb626bba4c63ef54fb314cfab4220d44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disabledParameters: []
+  disabledLayers: []
