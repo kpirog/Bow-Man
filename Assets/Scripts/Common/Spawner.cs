@@ -33,7 +33,7 @@ namespace Common
 
         private void SpawnPlayer()
         {
-            var player = ElympicsInstantiate("Prefabs/Player", PlayersToSpawn.Dequeue());
+            var player = ElympicsInstantiate("Prefabs/Player/Player", PlayersToSpawn.Dequeue());
             player.transform.position = spawnPositions[PlayersToSpawn.Count];
         }
     }

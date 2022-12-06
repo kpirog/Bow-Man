@@ -1,3 +1,4 @@
+using System;
 using Elympics;
 using Medicine;
 using UnityEngine;
@@ -10,7 +11,9 @@ namespace Player
         [SerializeField] private GameObject cameraRoot;
         [Inject] private PlayerMovementHandler MovementHandler { get; }
         [Inject] private PlayerInputProvider InputProvider { get; }
+        [Inject] private PlayerShootingController ShootingController { get; }
         
+
         public void Initialize()
         {
             if (IsLocalPlayer())
@@ -20,14 +23,17 @@ namespace Player
 
             cameraRoot.SetActive(IsLocalPlayer());
         }
-        
+
         public void OnInputForClient(IInputWriter inputSerializer)
         {
             if (!IsLocalPlayer())
                 return;
-            
+
             inputSerializer.Write(InputProvider.HorizontalAxis);
             inputSerializer.Write(InputProvider.Jump);
+            inputSerializer.Write(InputProvider.Fire);
+            inputSerializer.Write(InputProvider.MousePositionX);
+            inputSerializer.Write(InputProvider.MousePositionY);
         }
 
         #region Useless code
@@ -40,18 +46,23 @@ namespace Player
 
         public void ElympicsUpdate()
         {
+            HandleSlide();
+            
             if (!ElympicsBehaviour.TryGetInput(PredictableFor, out var inputReader))
                 return;
-            
+
             inputReader.Read(out float horizontalAxis);
             inputReader.Read(out bool jump);
-            
+            inputReader.Read(out bool fire);
+            inputReader.Read(out float mousePositionX);
+            inputReader.Read(out float mousePositionY);
+
             HandleMovement(horizontalAxis);
             HandleDrag(horizontalAxis);
             HandleJump(jump);
-            HandleSlide();
+            HandleShoot(fire, new Vector2(mousePositionX, mousePositionY));
         }
-
+        
         private void HandleMovement(float axis)
         {
             MovementHandler.Move(axis);
@@ -72,7 +83,12 @@ namespace Player
             MovementHandler.Slide();
         }
 
-        private bool IsLocalPlayer()
+        private void HandleShoot(bool fire, Vector2 mousePosition)
+        {
+            ShootingController.ProcessShoot(fire, mousePosition);
+        }
+
+        public bool IsLocalPlayer()
         {
             return Elympics.Player == PredictableFor;
         }
