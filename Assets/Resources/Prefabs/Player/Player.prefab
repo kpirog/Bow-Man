@@ -535,6 +535,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4955d331e14da74892a9669bc57799e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pushArrowsCount:
+    currentValue: 99
+  iceArrowsCount:
+    currentValue: 99
+  invertedArrowsCount:
+    currentValue: 99
 --- !u!114 &3978961816303994501
 MonoBehaviour:
   m_ObjectHideFlags: 0
