@@ -1,6 +1,9 @@
+using System;
 using Elympics;
 using UnityEngine;
 using Medicine;
+using Player;
+using Player.Effects;
 
 namespace Projectiles
 {
@@ -8,9 +11,11 @@ namespace Projectiles
     {
         [SerializeField] private float speed;
         [SerializeField] private float lifeTime;
+        [SerializeField] private PlayerEffect playerEffect;
 
         [SerializeField] private LayerMask collisionLayer;
         [Inject] private Rigidbody2D Rb { get; }
+        [Inject] private SpriteRenderer SpriteRenderer { get; }
 
         private readonly ElympicsBool _firstAction = new();
         private readonly ElympicsBool _collisionActive = new();
@@ -23,10 +28,19 @@ namespace Projectiles
 
         private readonly ElympicsGameObject _owner = new();
 
+        private Color _startColor;
+
+        private void Awake()
+        {
+            _startColor = SpriteRenderer.color;
+        }
+
         public void Initialize()
         {
             _startPosition.ValueChanged += OnStartPositionUpdated;
             _lifeTimer.Value = lifeTime;
+
+            SpriteRenderer.color = new Color(1f, 1f, 1f, 0f);
         }
 
         public void Setup(Vector2 direction, Vector2 startPosition, float drawForce, ElympicsBehaviour owner)
@@ -44,6 +58,7 @@ namespace Projectiles
             if (!_collisionActive.Value)
             {
                 _firstAction.Value = true;
+                SpriteRenderer.color = _startColor;
             }
         }
 
@@ -88,13 +103,14 @@ namespace Projectiles
 
             if (!collision) return;
 
-            var player = collision.transform.GetComponent<ElympicsBehaviour>();
+            var player = collision.transform.GetComponent<PlayerController>();
 
             if (player)
             {
-                if (_owner.Value != player)
+                if (_owner.Value != player.ElympicsBehaviour)
                 {
                     SetAfterCollision(player.transform, collision.point);
+                    playerEffect.ApplyTo(player, collision.point);
                 }
             }
             else
@@ -111,5 +127,10 @@ namespace Projectiles
             transform.SetParent(parent);
             _collisionActive.Value = false;
         }
+    }
+
+    public enum ArrowType
+    {
+        Push, Ice, Inverted
     }
 }

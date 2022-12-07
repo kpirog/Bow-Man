@@ -1,3 +1,4 @@
+using System;
 using Elympics;
 using Medicine;
 using Projectiles;
@@ -9,8 +10,31 @@ namespace Player
     {
         [Inject] private PlayerAnimationHandler AnimationHandler { get; }
 
+        private string _arrowPrefabPath;
         private float _drawingForce;
         private bool CanRelease => _drawingForce > 0f;
+
+        private void Awake()
+        {
+            SetCurrentArrow(ArrowType.Push);
+        }
+
+        public void SetCurrentArrow(ArrowType type)
+        {
+            switch (type)
+            {
+                default:
+                case ArrowType.Push:
+                    _arrowPrefabPath = "Prefabs/Projectiles/Push Arrow";
+                    break;
+                case ArrowType.Ice:
+                    _arrowPrefabPath = "Prefabs/Projectiles/Ice Arrow";
+                    break;
+                case ArrowType.Inverted:
+                    _arrowPrefabPath = "Prefabs/Projectiles/Inverted Arrow";
+                    break;
+            }
+        }
 
         public void ProcessShoot(bool input, Vector2 mousePosition)
         {
@@ -39,11 +63,11 @@ namespace Player
 
         private void CreateArrow(Vector2 mousePosition)
         {
-            var arrow = ElympicsInstantiate("Prefabs/Projectiles/Arrow", ElympicsPlayer.All).GetComponent<Arrow>();
-            
+            var arrow = ElympicsInstantiate(_arrowPrefabPath, ElympicsPlayer.All).GetComponent<Arrow>();
+
             arrow.Setup((mousePosition - (Vector2)transform.position).normalized, transform.position, _drawingForce,
                 ElympicsBehaviour);
-            
+
             ResetBow();
         }
 
