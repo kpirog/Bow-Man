@@ -91,7 +91,7 @@ namespace Projectiles
 
         private void Release()
         {
-            Rb.AddForce(_direction.Value * (_drawForce.Value * speed * Elympics.TickDuration), ForceMode2D.Impulse);
+            Rb.AddForce(_direction.Value * (_drawForce.Value * speed), ForceMode2D.Impulse);
             _firstAction.Value = false;
             _collisionActive.Value = true;
         }

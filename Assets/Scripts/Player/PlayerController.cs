@@ -13,6 +13,8 @@ namespace Player
         [Inject] private PlayerShootingController ShootingController { get; }
         [Inject] public PlayerInputProvider InputProvider { get; }
         [Inject] public PlayerCollisionHandler CollisionHandler { get; }
+
+        public ElympicsPlayer Local => PredictableFor;
         
         public void Initialize()
         {

@@ -11,6 +11,7 @@ namespace Player
         [SerializeField] private ElympicsInt iceArrowsCount;
         [SerializeField] private ElympicsInt invertedArrowsCount;
         [Inject] private PlayerAnimationHandler AnimationHandler { get; }
+        [Inject.FromChildren] private TrajectoryPrediction TrajectoryPrediction { get; }
 
         private ElympicsInt _arrowsCount = new();
         
@@ -52,7 +53,7 @@ namespace Player
             
             if (input)
             {
-                DrawBow();
+                DrawBow(CalculateShootAngle(mousePosition));
             }
             else
             {
@@ -61,7 +62,7 @@ namespace Player
             }
         }
 
-        private void DrawBow()
+        private void DrawBow(float angle)
         {
             _drawingForce += Elympics.TickDuration;
 
@@ -71,12 +72,19 @@ namespace Player
             }
 
             AnimationHandler.SetShootAnimation();
+
+            if (Elympics.IsClient)
+            {
+                TrajectoryPrediction.DisplayTrajectory(_drawingForce, 30f, CalculateShootDirection(angle));
+            }
         }
 
         private void CreateArrow(Vector2 mousePosition)
         {
+            Vector2 position = transform.position;
+            
             var arrow = ElympicsInstantiate(_arrowPrefabPath, ElympicsPlayer.All).GetComponent<Arrow>();
-            arrow.Setup((mousePosition - (Vector2)transform.position).normalized, transform.position, _drawingForce,
+            arrow.Setup((mousePosition - position).normalized, position, _drawingForce,
                 ElympicsBehaviour);
 
             DecreaseArrowsCount();
@@ -106,7 +114,19 @@ namespace Player
         private void ResetBow()
         {
             AnimationHandler.StopShootAnimation();
+            TrajectoryPrediction.SetVisible(false);
             _drawingForce = 0f;
+        }
+        
+        private Vector2 CalculateShootDirection(float angle)
+        {
+            return Quaternion.Euler(0f, 0f, angle) * transform.right;
+        }
+
+        private float CalculateShootAngle(Vector2 mousePosition)
+        {
+            var direction = (mousePosition - (Vector2)transform.position).normalized;
+            return -Vector2.SignedAngle(direction, transform.right);
         }
     }
 }
