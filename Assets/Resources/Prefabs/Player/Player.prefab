@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8862256361089048935}
-  - component: {fileID: 4730530980506855056}
-  - component: {fileID: 9120474456292968655}
   - component: {fileID: 2197897978997905224}
   m_Layer: 3
   m_Name: Trajectory Prediction
@@ -34,56 +32,6 @@ Transform:
   m_Father: {fileID: 8189976477174412367}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4730530980506855056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095259586591245936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 334c2a3facb248ac8c1a599797c52dae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceNetworkId: 0
-  networkId: 2
-  predictableFor:
-    playerIndex: 0
-  isUpdatableForNonOwners: 0
-  visibleFor:
-    playerIndex: -3
-  stateFrequencyStages:
-  - stageDurationInMiliseconds: 500
-    frequencyInMiliseconds: 30
-    maxStageDurationInMiliseconds: 5000
-  - stageDurationInMiliseconds: 1000
-    frequencyInMiliseconds: 200
-    maxStageDurationInMiliseconds: 5000
-  - stageDurationInMiliseconds: 1000
-    frequencyInMiliseconds: 1000
-    maxStageDurationInMiliseconds: 5000
---- !u!114 &9120474456292968655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095259586591245936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7b382d63b93bdf4bbeda8299ce4a906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localPositionConfig:
-    synchronizationEnabled: 1
-    tolerance: 0.01
-  localScaleConfig:
-    synchronizationEnabled: 1
-    tolerance: 0.01
-  localRotationConfig:
-    synchronizationEnabled: 1
-    tolerance: 1
 --- !u!114 &2197897978997905224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c745206e4bd9e354eb7c27fb032aa6c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spaceBetweenPoints: 0.05
+  predictionPointPrefab: {fileID: 3950804405248111244, guid: a407304bc1e30544cbea7f5ffc4d9567, type: 3}
+  spaceBetweenPoints: 0.1
   amountOfPoints: 50
 --- !u!1 &4335785574106325222
 GameObject:
@@ -588,9 +537,12 @@ MonoBehaviour:
   acceleration: 1000
   jumpForce: 300
   drag: 10
+  maxVelocity: 10
   wallSlidingMultiplier: 1
   fallMultiplier: 2
   lowJumpMultiplier: 4
+  horizontalVelocityReduction: {x: 0.95, y: 1}
+  verticalVelocityReduction: {x: 1, y: 0.95}
 --- !u!114 &1417588860647492102
 MonoBehaviour:
   m_ObjectHideFlags: 0

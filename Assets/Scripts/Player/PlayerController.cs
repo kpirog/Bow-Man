@@ -51,6 +51,7 @@ namespace Player
 
         public void ElympicsUpdate()
         {
+            MovementHandler.LimitSpeed();
             HandleSlide();
             
             if (!ElympicsBehaviour.TryGetInput(PredictableFor, out var inputReader))

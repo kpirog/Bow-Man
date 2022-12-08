@@ -1,30 +1,31 @@
 using System.Linq;
-using Elympics;
 using UnityEngine;
 
 namespace Projectiles
 {
-    public class TrajectoryPrediction : ElympicsMonoBehaviour, IInitializable
+    public class TrajectoryPrediction : MonoBehaviour
     {
+        [SerializeField] private GameObject predictionPointPrefab;
         [SerializeField] private float spaceBetweenPoints;
         [SerializeField] private int amountOfPoints;
 
-        private ElympicsList<ElympicsGameObject> _predictionPoints;
-        private bool Visible => _predictionPoints.All(x => x.Value.gameObject.activeSelf);
+        private GameObject[] _predictionPoints;
+        private bool Visible => _predictionPoints.All(x => x.activeSelf);
 
-        public void Initialize()
+        private void Awake()
         {
-            _predictionPoints = new ElympicsList<ElympicsGameObject>(() => new ElympicsGameObject());
+            _predictionPoints = new GameObject[amountOfPoints];
 
             for (var i = 0; i < amountOfPoints; i++)
             {
-                var point = ElympicsInstantiate("Prefabs/Trajectory/Prediction Point", ElympicsPlayer.All);
-                _predictionPoints.Add().Value = point.GetComponent<ElympicsBehaviour>();
+                var point = Instantiate(predictionPointPrefab, transform.position, Quaternion.identity);
+                point.transform.SetParent(transform);
+                _predictionPoints[i] = point;
             }
 
             SetVisible(false);
         }
-
+        
         public void DisplayTrajectory(float drawingForce, float speed, Vector2 direction)
         {
             if (!Visible)
@@ -32,9 +33,9 @@ namespace Projectiles
                 SetVisible(true);
             }
 
-            for (var i = 0; i < _predictionPoints.Count; i++)
+            for (var i = 0; i < _predictionPoints.Length; i++)
             {
-                _predictionPoints[i].Value.transform.position = PointPosition(i * drawingForce * spaceBetweenPoints,
+                _predictionPoints[i].transform.position = PointPosition(i * drawingForce * spaceBetweenPoints,
                     drawingForce, speed, direction);
             }
         }
@@ -43,7 +44,8 @@ namespace Projectiles
         {
             foreach (var point in _predictionPoints)
             {
-                point.Value.gameObject.SetActive(visible);
+                point.gameObject.SetActive(visible);
+                point.transform.position = transform.position;
             }
         }
 

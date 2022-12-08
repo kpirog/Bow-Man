@@ -75,7 +75,7 @@ namespace Player
 
             if (Elympics.IsClient)
             {
-                TrajectoryPrediction.DisplayTrajectory(_drawingForce, 30f, CalculateShootDirection(angle));
+                TrajectoryPrediction.DisplayTrajectory(_drawingForce, 30f, CalculateShootDirection(angle)); //tutaj speed pobrac z prefabow arrowa albo cos
             }
         }
 
@@ -114,7 +114,12 @@ namespace Player
         private void ResetBow()
         {
             AnimationHandler.StopShootAnimation();
-            TrajectoryPrediction.SetVisible(false);
+
+            if (Elympics.IsClient)
+            {
+                TrajectoryPrediction.SetVisible(false);
+            }
+
             _drawingForce = 0f;
         }
         

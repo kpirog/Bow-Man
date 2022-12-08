@@ -1,4 +1,3 @@
-using System;
 using Elympics;
 using Medicine;
 using UnityEngine;
@@ -11,10 +10,15 @@ namespace Player
         [SerializeField] private float acceleration;
         [SerializeField] private float jumpForce;
         [SerializeField] private float drag;
-        
+        [SerializeField] private float maxVelocity;
+
         [SerializeField] private float wallSlidingMultiplier;
         [SerializeField] private float fallMultiplier;
         [SerializeField] private float lowJumpMultiplier;
+
+        [SerializeField] private Vector2 horizontalVelocityReduction;
+        [SerializeField] private Vector2 verticalVelocityReduction;
+        
         [Inject] private Rigidbody2D Rb { get; }
         [Inject] private PlayerTouchDetector TouchDetector { get; }
         [Inject] private PlayerAnimationHandler AnimationHandler { get; }
@@ -122,6 +126,19 @@ namespace Player
         private bool IsFallingDown()
         {
             return Rb.velocity.y < 0f;
+        }
+
+        public void LimitSpeed()
+        {
+            if (Mathf.Abs(Rb.velocity.x) > maxVelocity)
+            {
+                Rb.velocity *= horizontalVelocityReduction;
+            }
+
+            if (Mathf.Abs(Rb.velocity.y) > maxVelocity)
+            {
+                Rb.velocity *= verticalVelocityReduction;
+            }
         }
     }
 }

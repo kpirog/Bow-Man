@@ -152,13 +152,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionConfig:
     synchronizationEnabled: 1
-    tolerance: 0.001
+    tolerance: 0.0001
   rotationConfig:
     synchronizationEnabled: 0
     tolerance: 1
   velocityConfig:
     synchronizationEnabled: 1
-    tolerance: 0.001
+    tolerance: 0.0001
   angularVelocityConfig:
     synchronizationEnabled: 0
     tolerance: 1
