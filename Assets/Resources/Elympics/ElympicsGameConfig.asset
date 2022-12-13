@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameName: Bow Man
   gameId: 97744815-55d1-4556-bb0e-0a3574d725ab
-  gameVersion: 1
+  gameVersion: 4
   players: 2
   gameplayScene: Assets/Scenes/Game.unity
   gameplaySceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}

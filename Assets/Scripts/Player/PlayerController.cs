@@ -11,6 +11,8 @@ namespace Player
         [SerializeField] private GameObject cameraRoot;
         [Inject] private PlayerMovementHandler MovementHandler { get; }
         [Inject] private PlayerShootingController ShootingController { get; }
+        [Inject] private PlayerTouchDetector TouchDetector { get; }
+        [Inject] private PlayerAnimationHandler AnimationHandler { get; }
         [Inject] public PlayerInputProvider InputProvider { get; }
         [Inject] public PlayerCollisionHandler CollisionHandler { get; }
 
@@ -53,6 +55,7 @@ namespace Player
         {
             MovementHandler.LimitSpeed();
             HandleSlide();
+            HandleFallDown();
             
             if (!ElympicsBehaviour.TryGetInput(PredictableFor, out var inputReader))
                 return;
@@ -112,6 +115,11 @@ namespace Player
             {
                 ShootingController.SetCurrentArrow(ArrowType.Inverted);
             }
+        }
+
+        private void HandleFallDown()
+        {
+            AnimationHandler.SetFallDownAnimation(!TouchDetector.IsGrounded && MovementHandler.IsFallingDown());
         }
 
         private bool IsLocalPlayer()

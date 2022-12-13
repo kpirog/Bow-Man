@@ -29,7 +29,7 @@ namespace Player
         private bool _doubleJumpAvailable;
         private bool _doubleJumpUsed;
         private bool _jumpLocked;
-
+        
         public void Move(float axis)
         {
             Rb.AddForce(Vector2.right * axis * acceleration * Elympics.TickDuration, ForceMode2D.Force);
@@ -123,7 +123,7 @@ namespace Player
                     Mathf.Clamp(Rb.velocity.y, -wallSlidingMultiplier, float.MaxValue));
             }
         }
-        private bool IsFallingDown()
+        public bool IsFallingDown()
         {
             return Rb.velocity.y < 0f;
         }

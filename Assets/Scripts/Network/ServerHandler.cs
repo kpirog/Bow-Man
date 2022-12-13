@@ -33,7 +33,7 @@ namespace Network
             Debug.Log(
                 $"Game initialized with {humansPlayers} human players and {initialMatchPlayerDatas.Count - humansPlayers} bots");
 
-            StartCoroutine(WaitForGameStartOrEnd());
+            //StartCoroutine(WaitForGameStartOrEnd());
         }
 
         private IEnumerator WaitForGameStartOrEnd()
@@ -60,7 +60,7 @@ namespace Network
 
             Debug.Log($"Player {player} disconnected");
             Debug.Log("Game ended!");
-            Elympics.EndGame();
+            //Elympics.EndGame();
         }
 
         public void OnPlayerConnected(ElympicsPlayer player)
@@ -79,9 +79,9 @@ namespace Network
             _gameStarted = true;
             Debug.Log("Game started!");
         }
+
         private void Start()
         {
-            
         }
     }
 }

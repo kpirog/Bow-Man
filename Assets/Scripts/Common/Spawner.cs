@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Elympics;
 using UnityEngine;
+using Utils;
 
 namespace Common
 {
@@ -12,7 +13,7 @@ namespace Common
         public static readonly Queue<ElympicsPlayer> PlayersToSpawn = new();
 
         private bool _canSpawn;
-
+        
         public void ElympicsUpdate()
         {
             if (!_canSpawn)
@@ -26,14 +27,17 @@ namespace Common
                     _canSpawn = false;
                     return;
                 }
-                
-                SpawnPlayer();
+
+                if (Elympics.IsServer)
+                {
+                    SpawnPlayer();
+                }
             }
         }
 
         private void SpawnPlayer()
         {
-            var player = ElympicsInstantiate("Prefabs/Player/Player", PlayersToSpawn.Dequeue());
+            var player = ElympicsInstantiate(ResourcesExtension.GetPrefabPath("Player"), PlayersToSpawn.Dequeue());
             player.transform.position = spawnPositions[PlayersToSpawn.Count];
         }
     }

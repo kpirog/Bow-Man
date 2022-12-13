@@ -1,7 +1,9 @@
+using System;
 using Elympics;
 using Medicine;
 using Projectiles;
 using UnityEngine;
+using Utils;
 
 namespace Player
 {
@@ -24,22 +26,22 @@ namespace Player
         {
             SetCurrentArrow(ArrowType.Push);
         }
-
+        
         public void SetCurrentArrow(ArrowType type)
         {
             switch (type)
             {
                 default:
                 case ArrowType.Push:
-                    _arrowPrefabPath = "Prefabs/Projectiles/Push Arrow";
+                    _arrowPrefabPath = ResourcesExtension.GetPrefabPath("Push Arrow");
                     _arrowsCount = pushArrowsCount;
                     break;
                 case ArrowType.Ice:
-                    _arrowPrefabPath = "Prefabs/Projectiles/Ice Arrow";
+                    _arrowPrefabPath = ResourcesExtension.GetPrefabPath("Ice Arrow");
                     _arrowsCount = iceArrowsCount;
                     break;
                 case ArrowType.Inverted:
-                    _arrowPrefabPath = "Prefabs/Projectiles/Inverted Arrow";
+                    _arrowPrefabPath = ResourcesExtension.GetPrefabPath("Inverted Arrow");
                     _arrowsCount = invertedArrowsCount;
                     break;
             }
@@ -82,7 +84,7 @@ namespace Player
         private void CreateArrow(Vector2 mousePosition)
         {
             Vector2 position = transform.position;
-            
+
             var arrow = ElympicsInstantiate(_arrowPrefabPath, ElympicsPlayer.All).GetComponent<Arrow>();
             arrow.Setup((mousePosition - position).normalized, position, _drawingForce,
                 ElympicsBehaviour);
