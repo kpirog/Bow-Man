@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Player
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class PlayerMovementHandler : ElympicsMonoBehaviour
+    public class PlayerMovementHandler : ElympicsMonoBehaviour, IUpdatable
     {
         [SerializeField] private float acceleration;
         [SerializeField] private float jumpForce;
@@ -23,6 +23,8 @@ namespace Player
         [Inject] private PlayerTouchDetector TouchDetector { get; }
         [Inject] private PlayerAnimationHandler AnimationHandler { get; }
 
+        private readonly ElympicsFloat _slowTimer = new();
+        
         private bool IsGrounded => TouchDetector.IsGrounded || TouchDetector.IsSliding;
         private bool CanJump => (IsGrounded || _doubleJumpAvailable) && !_jumpLocked;
 
@@ -30,9 +32,25 @@ namespace Player
         private bool _doubleJumpUsed;
         private bool _jumpLocked;
         
+        private float _currentAcceleration;
+        private int _slowMultiplier;
+        
+        public void ElympicsUpdate()
+        {
+            if (_slowTimer.Value > 0f)
+            {
+                _slowTimer.Value -= Elympics.TickDuration;
+                Debug.Log($"Slow time = {_slowTimer.Value}");
+            }
+            else
+            {
+                _currentAcceleration = acceleration;
+            }
+        }
+        
         public void Move(float axis)
         {
-            Rb.AddForce(Vector2.right * axis * acceleration * Elympics.TickDuration, ForceMode2D.Force);
+            Rb.AddForce(Vector2.right * axis * _currentAcceleration * Elympics.TickDuration, ForceMode2D.Force);
             AnimationHandler.SetMovementAnimation(axis);
         }
 
@@ -139,6 +157,12 @@ namespace Player
             {
                 Rb.velocity *= verticalVelocityReduction;
             }
+        }
+
+        public void SetSlow(float slowTime, float slowMultiplier)
+        {
+            _slowTimer.Value = slowTime;
+            _currentAcceleration = acceleration * slowMultiplier;
         }
     }
 }

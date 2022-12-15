@@ -9,12 +9,12 @@ namespace Player
     public class PlayerController : ElympicsMonoBehaviour, IInputHandler, IUpdatable, IInitializable
     {
         [SerializeField] private GameObject cameraRoot;
-        [Inject] private PlayerMovementHandler MovementHandler { get; }
         [Inject] private PlayerShootingController ShootingController { get; }
         [Inject] private PlayerTouchDetector TouchDetector { get; }
         [Inject] private PlayerAnimationHandler AnimationHandler { get; }
         [Inject] public PlayerInputProvider InputProvider { get; }
         [Inject] public PlayerCollisionHandler CollisionHandler { get; }
+        [Inject] public PlayerMovementHandler MovementHandler { get; }
 
         public ElympicsPlayer Local => PredictableFor;
         

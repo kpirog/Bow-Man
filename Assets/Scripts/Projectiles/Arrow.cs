@@ -11,6 +11,7 @@ namespace Projectiles
     {
         [SerializeField] private float speed;
         [SerializeField] private float lifeTime;
+        [SerializeField] private int damage;
         [SerializeField] private PlayerEffect playerEffect;
 
         [SerializeField] private LayerMask collisionLayer;
@@ -115,6 +116,15 @@ namespace Projectiles
             }
             else
             {
+                var damageable = collision.transform.GetComponent<IDamageable>();
+
+                if (damageable != null)
+                {
+                    damageable.TakeDamage(damage);
+                    ElympicsDestroy(gameObject);
+                    return;
+                }
+                
                 SetAfterCollision(null, collision.point);
             }
         }
