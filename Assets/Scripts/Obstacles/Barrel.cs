@@ -35,7 +35,6 @@ namespace Obstacles
                 
                 if (_destroyTime.Value <= 0f)
                 {
-                    Debug.Log("Destroy ");
                     DestroyHandler.destroyed.Value = true;
                 }
             }

@@ -15,6 +15,7 @@ namespace Player
         public bool StandardArrow { get; private set; }
         public bool IceArrow { get; private set; }
         public bool InvertedArrow { get; private set; }
+        public bool JetpackHold { get; private set; }
 
         private readonly ElympicsFloat _freezeTimer = new();
         private readonly ElympicsFloat _inversionTimer = new();
@@ -51,6 +52,8 @@ namespace Player
             StandardArrow = Input.GetKey(KeyCode.Alpha1);
             IceArrow = Input.GetKey(KeyCode.Alpha2);
             InvertedArrow = Input.GetKey(KeyCode.Alpha3);
+
+            JetpackHold = !_inputInverted ? Input.GetKey(KeyCode.W) : Input.GetKey(KeyCode.S);
 
             if (!Fire) return;
             MousePositionX = GetMousePosition().x;

@@ -41,6 +41,7 @@ namespace Player
             inputSerializer.Write(InputProvider.StandardArrow);
             inputSerializer.Write(InputProvider.IceArrow);
             inputSerializer.Write(InputProvider.InvertedArrow);
+            inputSerializer.Write(InputProvider.JetpackHold);
         }
 
         #region Useless code
@@ -68,17 +69,19 @@ namespace Player
             inputReader.Read(out bool standardArrow);
             inputReader.Read(out bool iceArrow);
             inputReader.Read(out bool invertedArrow);
+            inputReader.Read(out bool jetpackHold);
 
-            HandleMovement(horizontalAxis);
+            HandleMovement(horizontalAxis, jetpackHold);
             HandleDrag(horizontalAxis);
             HandleJump(jump);
             HandleShoot(fire, new Vector2(mousePositionX, mousePositionY));
             HandleSwitchArrow(standardArrow, iceArrow, invertedArrow);
         }
         
-        private void HandleMovement(float axis)
+        private void HandleMovement(float horizontalAxis, bool jetpackHold)
         {
-            MovementHandler.Move(axis);
+            MovementHandler.Move(horizontalAxis);
+            MovementHandler.JetpackMove(jetpackHold);
         }
 
         private void HandleDrag(float axis)
