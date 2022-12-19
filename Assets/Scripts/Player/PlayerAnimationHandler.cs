@@ -1,3 +1,5 @@
+using System;
+using Common;
 using Elympics;
 using Medicine;
 using UnityEngine;
@@ -21,6 +23,16 @@ namespace Player
         private void Start()
         {
             SpriteDirection.ValueChanged += OnSpriteDirectionChanged;
+        }
+
+        private void OnEnable()
+        {
+            GameManager.Instance.OnGameStateChanged += SetAnimatorState;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnGameStateChanged -= SetAnimatorState;       
         }
 
         private void OnSpriteDirectionChanged(float oldValue, float newValue)
@@ -63,6 +75,11 @@ namespace Player
         public void SetGetHitAnimation()
         {
             Animator.SetTrigger(GetHitKey);
+        }
+
+        private void SetAnimatorState(GameState state)
+        {
+            Animator.enabled = state != GameState.Finished;
         }
     }
 }

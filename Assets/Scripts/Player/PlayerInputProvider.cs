@@ -1,3 +1,5 @@
+using System;
+using Common;
 using Elympics;
 using UnityEngine;
 
@@ -19,6 +21,7 @@ namespace Player
 
         private bool _inputFrozen;
         private bool _inputInverted;
+        private bool _inputAllowed;
         
         private Camera _mainCamera;
 
@@ -27,9 +30,19 @@ namespace Player
             _mainCamera = Camera.main;
         }
 
+        private void OnEnable()
+        {
+            GameManager.Instance.OnGameStateChanged += SetInputAccess;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.Instance.OnGameStateChanged -= SetInputAccess;
+        }
+
         private void Update()
         {
-            if (_inputFrozen) return;
+            if (!_inputAllowed || _inputFrozen) return;
 
             HorizontalAxis = !_inputInverted ? Input.GetAxis("Horizontal") : -Input.GetAxis("Horizontal");
             Jump = Input.GetKey(KeyCode.Space);
@@ -87,6 +100,11 @@ namespace Player
         {
             _inversionTimer.Value = time;
             _inputInverted = true;
+        }
+
+        private void SetInputAccess(GameState state)
+        {
+            _inputAllowed = state == GameState.Playing;
         }
     }
 }

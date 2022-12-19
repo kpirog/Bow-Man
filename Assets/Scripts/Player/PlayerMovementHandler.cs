@@ -40,7 +40,6 @@ namespace Player
             if (_slowTimer.Value > 0f)
             {
                 _slowTimer.Value -= Elympics.TickDuration;
-                Debug.Log($"Slow time = {_slowTimer.Value}");
             }
             else
             {

@@ -25,6 +25,7 @@ namespace Common
                 if (PlayersToSpawn.Count == 0)
                 {
                     _canSpawn = false;
+                    GameManager.Instance.CurrentState = GameState.Countdown;
                     return;
                 }
 
